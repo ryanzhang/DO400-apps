@@ -20,6 +20,11 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            sendNotification('finished', 'team@lmc.io')
+        }
+    }
 }
 void sendNotification(String action, String email) {
     mail to: "${email}",

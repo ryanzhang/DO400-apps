@@ -3,6 +3,9 @@ pipeline {
     environment { APP_NAMESPACE = 'classic-ryanzhang' }
     stages {
         stage('Test') {
+            options {
+                timeout(time:50, unit: 'SECONDS')
+            }
             steps {
                 dir('shopping-cart-v2') {
                   withMaven(globalMavenSettingsConfig: '2bc73d01-df9a-4505-9dc3-304673486172') {

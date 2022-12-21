@@ -15,16 +15,22 @@ pipeline {
                 }
             }
         }
-        // stage('Image Build') {
-        //     steps {
-        //         dir('shopping-cart-v2') {
-        //             sh """
-        //                 oc start-build shopping-cart-v2 \
-        //                 --follow --wait -n ${APP_NAMESPACE}
-        //             """
-        //         }
-        //     }
-        // }
+        stage('Build Image') {
+            environment { QUAY = credentials('QUAY_USER') }
+            steps {
+                dir('shopping-cart-v2') {
+                  withMaven(globalMavenSettingsConfig: '2bc73d01-df9a-4505-9dc3-304673486172') {
+                    sh './scripts/include-container-extensions.sh'
+                    sh '''
+                        ./scripts/build-and-push-image.sh \
+                        -u $QUAY_USR \
+                        -p $QUAY_PSW \
+                        -b $BUILD_NUMBER
+                    '''
+                  }
+                }
+            }
+        }
         // stage('Deploy') {
         //     steps {
         //         dir('shopping-cart-v2') {

@@ -28,7 +28,7 @@ pipeline {
                                 sh 'mvn clean checkstyle:check'
                             }
                         } catch (Exception e) {
-                            sendWarningAlert("${STAGE_NAME}", "team@lmc.io")
+                            sendWarningAlert("${STAGE_NAME}", "dev@lmc.io")
                             unstable("${STAGE_NAME} stage failed!")
                         }
                     }

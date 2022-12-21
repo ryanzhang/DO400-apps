@@ -1,0 +1,22 @@
+pipeline {
+    agent { node { label 'maven' } }
+    options { skipDefaultCheckout true }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                // git branch: 'main',
+                    // url: 'https://gitlab.consulting.redhat.com/skywalker/rhu/DO400-apps.git'
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('simple-calculator') {
+                    withMaven(globalMavenSettingsConfig: '2bc73d01-df9a-4505-9dc3-304673486172') {
+                        sh 'mvn clean test'
+                    }
+                }
+            }
+        }
+    }
+}

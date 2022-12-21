@@ -43,6 +43,8 @@ objects:
   apiVersion: apps/v1
   metadata:
     name: prometheus
+    labels:
+      app.kubernetes.io/part-of: observability
   spec:
     selector:
       matchLabels:
@@ -111,5 +113,5 @@ parameters:
 - name: PROMETHEUS_VERSION
   description: Prometheus container image tag
   required: false
-  value: "v2.23.0"
+  value: "v2.41.0"
 

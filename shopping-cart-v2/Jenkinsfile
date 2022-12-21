@@ -1,0 +1,37 @@
+pipeline {
+    agent { node { label 'maven' } }
+    environment { APP_NAMESPACE = 'classic-ryanzhang' }
+    stages {
+        stage('Test') {
+            steps {
+                dir('shopping-cart-v2') {
+                  withMaven(globalMavenSettingsConfig: '2bc73d01-df9a-4505-9dc3-304673486172') {
+                    sh "mvn clean test"
+                  }
+                    // sh './mvnw clean test'
+                }
+            }
+        }
+        // stage('Image Build') {
+        //     steps {
+        //         dir('shopping-cart-v2') {
+        //             sh """
+        //                 oc start-build shopping-cart-v2 \
+        //                 --follow --wait -n ${APP_NAMESPACE}
+        //             """
+        //         }
+        //     }
+        // }
+        // stage('Deploy') {
+        //     steps {
+        //         dir('shopping-cart-v2') {
+        //             sh """
+        //                 oc patch deployment shopping-cart-v2 \
+        //                 -p '{"spec": {"template": {"metadata": {"labels": {"build": "build-${BUILD_NUMBER}"}}}}}' \
+        //                 -n ${APP_NAMESPACE}
+        //             """
+        //         }
+        //     }
+        // }
+    }
+}

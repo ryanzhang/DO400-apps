@@ -9,6 +9,8 @@ objects:
     apiVersion: apps/v1
     metadata:
       name: shopping-cart-v2
+      labels:
+        app.kubernetes.io/part-of: do400-devsecops
     spec:
       selector:
         matchLabels:

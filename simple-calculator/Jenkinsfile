@@ -5,8 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-                // sendNotification('started', 'team@lmc.io')
-                mail bcc: '', body: 'hey, started', cc: '', from: '', replyTo: '', subject: 'Ah', to: 'team@lmc.io'
+                sendNotification('started', 'team@lmc.io')
                 // git branch: 'main',
                     // url: 'https://gitlab.consulting.redhat.com/skywalker/rhu/DO400-apps.git'
             }
@@ -30,22 +29,22 @@ pipeline {
             }
         } 
     }
-    // post {
-    //     failure {
-    //         sendFailureAlert('team@lmc.io')
-    //     }
-    //     always {
-    //         sendNotification('finished', 'team@lmc.io')
-    //     }
-    // }
+    post {
+        failure {
+            sendFailureAlert('team@lmc.io')
+        }
+        always {
+            sendNotification('finished', 'team@lmc.io')
+        }
+    }
 }
-// void sendNotification(String action, String email) {
-//     mail to: "${email}",
-//         subject: "Pipeline ${action}: ${currentBuild.fullDisplayName}",
-//         body: "The following pipeline ${action}: ${env.BUILD_URL}"
-// }
-// void sendFailureAlert(String email) {
-//     mail to: "${email}",
-//         subject: "Pipeline failed: ${currentBuild.fullDisplayName}",
-//         body: "The following pipeline failed: ${env.BUILD_URL}"
-// }
+void sendNotification(String action, String email) {
+    emailext to: "${email}",
+        subject: "Pipeline ${action}: ${currentBuild.fullDisplayName}",
+        body: "The following pipeline ${action}: ${env.BUILD_URL}"
+}
+void sendFailureAlert(String email) {
+    emailext to: "${email}",
+        subject: "Pipeline failed: ${currentBuild.fullDisplayName}",
+        body: "The following pipeline failed: ${env.BUILD_URL}"
+}

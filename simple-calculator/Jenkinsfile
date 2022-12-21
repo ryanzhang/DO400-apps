@@ -22,13 +22,15 @@ pipeline {
         stage('Check Style') {
             steps {
                 dir('simple-calculator') {
-                    try{
-                        withMaven(globalMavenSettingsConfig: '2bc73d01-df9a-4505-9dc3-304673486172') {
-                            sh 'mvn clean checkstyle:check'
+                    script{
+                        try{
+                            withMaven(globalMavenSettingsConfig: '2bc73d01-df9a-4505-9dc3-304673486172') {
+                                sh 'mvn clean checkstyle:check'
+                            }
+                        } catch (Exception e) {
+                            sendWarningAlert("${STAGE_NAME}", "team@lmc.io")
+                            unstable("${STAGE_NAME} stage failed!")
                         }
-                    } catch (Exception e) {
-                        sendWarningAlert("${STAGE_NAME}", "team@lmc.io")
-                        unstable("${STAGE_NAME} stage failed!")
                     }
                 }
             }

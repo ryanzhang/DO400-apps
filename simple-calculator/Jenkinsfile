@@ -5,6 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                sendNotification('started', 'team@lmc.io')
                 // git branch: 'main',
                     // url: 'https://gitlab.consulting.redhat.com/skywalker/rhu/DO400-apps.git'
             }
@@ -19,4 +20,9 @@ pipeline {
             }
         }
     }
+}
+void sendNotification(String action, String email) {
+    mail to: "${email}",
+        subject: "Pipeline ${action}: ${currentBuild.fullDisplayName}",
+        body: "The following pipeline ${action}: ${env.BUILD_URL}"
 }
